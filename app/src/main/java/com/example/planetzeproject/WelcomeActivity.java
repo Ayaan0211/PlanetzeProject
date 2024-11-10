@@ -11,7 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity {
 
     private Button login;
     private Button signup;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View v){
-               Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+               Intent intent = new Intent(WelcomeActivity.this, MainActivity2.class);
                startActivity(intent);
                finish();
            }
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity2.class);
                 startActivity(intent);
                 finish();
             }
