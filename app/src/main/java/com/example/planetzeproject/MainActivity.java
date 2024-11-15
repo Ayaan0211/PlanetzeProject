@@ -8,6 +8,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,5 +24,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void saveAnswer(Firebase db, String user, int qnum, String answer){ //Pass db as arg so we don't need to set it every time
+        DatabaseReference qref = db.getReference("Users");
+        qref.child(user).child(qnum).setValue(answer);
     }
 }
