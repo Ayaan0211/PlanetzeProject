@@ -1,7 +1,7 @@
 - Related Issue
   Provide a concise description of the issue this pull request adresses
   
-- Propsed Changes
+- Proposed Changes
   Summary of key changes in the pull request
   
 - Type of Change
