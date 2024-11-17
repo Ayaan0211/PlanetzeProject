@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    tools:context=".HomepageActivity">
+    tools:context=".EcoTrackerActivity">
 
     <TextView
         android:id="@+id/user_details"
