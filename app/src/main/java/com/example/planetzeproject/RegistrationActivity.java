@@ -23,6 +23,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText emailTextView, passwordTextView, password2TextView;
     private FirebaseAuth mAuth;
     TextView textView;
+    Button button, back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,9 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordTextView = findViewById(R.id.password);
         password2TextView = findViewById(R.id.password2);
         textView = findViewById(R.id.SignIn);
-        Button button = findViewById(R.id.button);
+        button = findViewById(R.id.button);
+        back = findViewById(R.id.btnBack);
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +53,16 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // Takes you to welcome page
+        back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
                 startActivity(intent);
                 finish();
             }
