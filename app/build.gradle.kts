@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.firebase.inappmessaging)
     //implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

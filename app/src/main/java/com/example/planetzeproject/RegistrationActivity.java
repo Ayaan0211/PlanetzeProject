@@ -73,15 +73,14 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_LONG).show();
             return;
         }
-        if (password.length() <= 6) {
+        if (password.length() < 6) {
             Toast.makeText(getApplicationContext(),
                     "Your password must be at least 6 characters long",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        if (password != password2) {
-            Toast.makeText(getApplicationContext(), "Passwords Are Not Equal",
-                    Toast.LENGTH_LONG).show();
+        if (!password.equals(password2)) {
+            Toast.makeText(getApplicationContext(), "Passwords Are Not Equal", Toast.LENGTH_LONG).show();
             return;
         }
 

@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-    TextView textView;
+    TextView textView, textView2;
 
     // Checks if a user is already logged in on start if so takes user to homepage
     @Override
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.registerNow);
-
+        textView2 = findViewById(R.id.resetPass);
 
 
         // Takes you the sign up
@@ -61,6 +61,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        //Takes you to password reset
+        textView2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
                 startActivity(intent);
                 finish();
             }
