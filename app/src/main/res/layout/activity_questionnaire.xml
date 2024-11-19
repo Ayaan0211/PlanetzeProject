@@ -24,11 +24,20 @@
             android:text="@string/header_activity_questionnaire" />
 
         <Spinner
-            android:id="@+id/countrySelector"
+            android:id="@+id/categorySelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="48dp"
-            android:importantForAccessibility="yes"
-            android:contentDescription="Choose a country" />
+            android:contentDescription="Choose a category"
+            android:importantForAccessibility="yes" />
+
+        <Spinner
+            android:id="@+id/questionSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/answerSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

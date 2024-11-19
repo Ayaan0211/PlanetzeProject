@@ -2,4 +2,5 @@
     <string name="app_name">Planetze Project</string>
     <string name="title_activity_questionnaire">QuestionnaireActivity</string>
     <string name="header_activity_questionnaire">Questionnaire</string>
+    <string name="empty_answer">–</string>
 </resources>
