@@ -55,4 +55,9 @@ public class QuestionnaireActivity extends AppCompatActivity {
             return insets;
         });
     }
+
+    public void saveAnswer(Firebase db, String user, int qnum, String answer){ //Pass db as arg so we don't need to set it every time
+        DatabaseReference uref = db.getReference("Users");
+        qref.child(user).child(qnum).setValue(answer);
+    }
 }
