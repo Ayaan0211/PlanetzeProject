@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private LoginPresenter presenter;
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin, back;
     FirebaseAuth mAuth;
@@ -40,9 +41,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /*public void login() {
+        System.out.println("WORKS!");
+        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(LoginActivity.this, EcoTrackerActivity.class);
+        startActivity(intent);
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        presenter = new LoginPresenter(new LoginModel(), this);
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
@@ -95,33 +105,29 @@ public class LoginActivity extends AppCompatActivity {
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
-                if (TextUtils.isEmpty(email)) {
+
+                if (presenter.emailEmpty(email)) {
                     Toast.makeText(LoginActivity.this, "Enter email", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (TextUtils.isEmpty(password)) {
+                if (presenter.passwordEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "Enter password", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), EcoTrackerActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                presenter.signIn(email, password, getApplicationContext());
+
+
+                /*if (presenter.signIn(email, password) == 1) {
+                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), EcoTrackerActivity.class);
+                    startActivity(intent);
+                }
+
+                else {
+                    Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                }*/
             }
         });
 
