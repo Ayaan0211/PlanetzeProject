@@ -35,6 +35,10 @@ public class LoginModel extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    public FirebaseUser checkUserStatus() {
+        return mAuth.getCurrentUser();
+    }
+
     public void signInEmailPassword(String email, String password, Context context) {
         //mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password)
@@ -46,17 +50,17 @@ public class LoginModel extends AppCompatActivity {
                             System.out.println("true");
                             //flag = 1;
                             //Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(context, EcoTrackerActivity.class);
+                            /*Intent intent = new Intent(context, EcoTrackerActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
+                            context.startActivity(intent);*/
                             /*startActivity(intent);
                             finish();*/
-                            //presenter.validSignIn();
+                            presenter.validSignIn(context);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(context, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
+                            /*Toast.makeText(context, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();*/
+                            presenter.invalidSignIn(context);
                             //presenter.invalidSignIn();
                         }
                     }

@@ -56,18 +56,23 @@ public class LoginPresenter extends AppCompatActivity {
         model.signInEmailPassword(email, password, context);
     }
 
-    public void validSignIn() {
+    public void validSignIn(Context context) {
         /*Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), EcoTrackerActivity.class);
         startActivity(intent);
         finish();*/
         System.out.println("WORKS VALID!");
-        //view.login();
+        view.login(context);
     }
 
-    public void invalidSignIn() {
+    public void invalidSignIn(Context context) {
         //Toast.makeText(view, "Authentication failed.", Toast.LENGTH_SHORT).show();
         //finish();
-        System.out.println("WORKS INVALID!");
+        //System.out.println("WORKS INVALID!");
+        view.invalidLogin(context);
+    }
+
+    public FirebaseUser checkLoggedIn() {
+        return model.checkUserStatus();
     }
 }
