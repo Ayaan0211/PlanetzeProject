@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.firebase.inappmessaging)
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     //implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
