@@ -144,9 +144,19 @@
         android:gravity="center" />
 
     <TextView
-        android:id="@+id/comp"
+        android:id="@+id/compuser"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="Your Daily Emission: , National Average: , Global Average: " />
+    <TextView
+        android:id="@+id/compnational"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="National Average:" />
+    <TextView
+        android:id="@+id/compglobal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Global Average: " />
 
 </LinearLayout>

@@ -96,7 +96,6 @@
                 android:textColor="@android:color/holo_blue_light"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
-
     </LinearLayout>
 </RelativeLayout>
 
