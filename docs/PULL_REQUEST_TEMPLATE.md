@@ -1,5 +1,5 @@
 - Related Issue
-  Provide a concise description of the issue this pull request adresses
+  Provide a concise description of the issue this pull request addresses
   
 - Proposed Changes
   Summary of key changes in the pull request
@@ -10,4 +10,4 @@
 - Self Code Review
   what was improved, potential edges cases considered, areas for attention.
   
-- Aditional Notes
+- Additional Notes
