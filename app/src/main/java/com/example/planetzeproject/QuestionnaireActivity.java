@@ -13,6 +13,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+
 public class QuestionnaireActivity extends AppCompatActivity {
 
     @Override
@@ -56,8 +59,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
     }
 
-    public void saveAnswer(Firebase db, String user, int qnum, String answer){ //Pass db as arg so we don't need to set it every time
+    public void saveAnswer(FirebaseDatabase db, String user, int qnum, String answer){ //Pass db as arg so we don't need to set it every time
         DatabaseReference uref = db.getReference("Users");
-        qref.child(user).child(qnum).setValue(answer);
+        uref.child(user).child(String.valueOf(qnum)).setValue(answer);
     }
 }

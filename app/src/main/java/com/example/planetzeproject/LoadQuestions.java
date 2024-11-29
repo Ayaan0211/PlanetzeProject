@@ -7,9 +7,8 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class LoadQuestions{
-    public List<Question> loadQuestions(FirebaseDatabase db){
-        List<Question> questions = new ArrayList<Question>();
+public class LoadQuestions{
+    public static void loadQuestions(FirebaseDatabase db, List<Question> questions){
         DatabaseReference qref = db.getReference("Questions");
         qref.addListenerForSingleValueEvent( new ValueEventListener(){
             @Override
@@ -27,6 +26,5 @@ public abstract class LoadQuestions{
                 System.out.println("Firebase Error");
             }
         });
-        return questions;
     }
 }

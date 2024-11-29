@@ -13,7 +13,15 @@ public class SliderQuestion implements Question{ // To follow D of SOLID xd
         this.answer = answer;
     }
 
-    public Question getQuestion(){
-        return this;
+    public String getQuestion(){
+        return questionText;
+    }
+
+    public List<String> getAnswers(){
+        return answer;
+    }
+
+    public int getNum(){
+        return questionNumber;
     }
 }
