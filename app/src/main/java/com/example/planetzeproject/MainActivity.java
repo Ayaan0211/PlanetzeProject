@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void saveAnswer(Firebase db, String user, int qnum, String answer){ //Pass db as arg so we don't need to set it every time
-        DatabaseReference qref = db.getReference("Users");
-        qref.child(user).child(qnum).setValue(answer);
+    public void saveAnswer(FirebaseDatabase db, String user, int qnum, String answer){ //Pass db as arg so we don't need to set it every time
+        DatabaseReference uref = db.getReference("Users");
+        uref.child(user).child(String.valueOf(qnum)).setValue(answer);
     }
 }
