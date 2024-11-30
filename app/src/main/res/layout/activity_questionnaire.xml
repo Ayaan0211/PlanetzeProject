@@ -13,6 +13,7 @@
         android:layout_height="729dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
+        android:background="#009999"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,23 +22,50 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/header_activity_questionnaire" />
+            android:layout_gravity="center_horizontal"
+            android:text="@string/header_activity_questionnaire"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#1B1B1E" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_category_activity_questionnaire"
+            android:textColor="#1B1B1E" />
 
         <Spinner
             android:id="@+id/categorySelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="Choose a category"
-            android:importantForAccessibility="yes" />
+            android:importantForAccessibility="yes"
+            android:minHeight="48dp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_question_activity_questionnaire"
+            android:textColor="#1B1B1E" />
 
         <Spinner
             android:id="@+id/questionSelector"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_answer_activity_questionnaire"
+            android:textColor="#1B1B1E" />
 
         <Spinner
             android:id="@+id/answerSelector"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

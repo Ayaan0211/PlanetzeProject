@@ -21,13 +21,14 @@ import androidx.core.view.WindowInsetsCompat;
 public class QuestionnaireActivity extends AppCompatActivity {
 
     protected String selectedCategory, selectedQuestion;
-    final String emptyAnswer = getResources().getString(R.string.empty_answer);
+    String emptyAnswer = "-"; // Will be overwritten during onCreate()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_questionnaire);
+        emptyAnswer = getResources().getString(R.string.empty_answer);
 
         // Set up maps (idk, it works?)
 
