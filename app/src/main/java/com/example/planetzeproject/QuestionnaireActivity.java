@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -18,6 +19,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 public class QuestionnaireActivity extends AppCompatActivity {
 
     protected String selectedCategory, selectedQuestion;
@@ -25,6 +32,9 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_questionnaire);
@@ -185,7 +195,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 String selectedAnswer = parentView.getItemAtPosition(position).toString();
 
                 // Save the selected answer
-                QuestionnaireActivity.this.saveAnswer(selectedAnswer);
+                QuestionnaireActivity.this.saveAnswer(db, user, selectedQuestion, selectedAnswer);
             }
 
             @Override
@@ -201,12 +211,17 @@ public class QuestionnaireActivity extends AppCompatActivity {
         });
     }
 
-    private void saveAnswer(String answer) {
-        //TODO: Save the answer that the user provided
-        if (answer.equals(emptyAnswer)) {
-            return;
+    private void saveAnswer(FirebaseDatabase db, FirebaseUser user, String question, String answer){
+        String userFormatted;
+        if (user != null) {
+            userFormatted = user.getUid().replace("/", "%2F");
         }
-        Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
+        else {
+            userFormatted = "nulluser";
+        }
+        String questionFormatted = question.replace("/", "%2F");
+        String answerFormatted = answer.replace("/", "%2F");
+        DatabaseReference uref = db.getReference("Users");
+        uref.child(userFormatted).child(questionFormatted).setValue(answerFormatted);
     }
-
 }
