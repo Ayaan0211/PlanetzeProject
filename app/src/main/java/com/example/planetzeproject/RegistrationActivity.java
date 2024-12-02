@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.Button;
+
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,26 +18,53 @@ import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText emailTextView, passwordTextView;
+    private EditText emailTextView, passwordTextView, password2TextView;
     private FirebaseAuth mAuth;
+    TextView textView;
+    Button button, back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_registration);
 
         mAuth = FirebaseAuth.getInstance();
 
         emailTextView = findViewById(R.id.email);
         passwordTextView = findViewById(R.id.password);
-        Button button = findViewById(R.id.button);
+        password2TextView = findViewById(R.id.password2);
+        textView = findViewById(R.id.SignIn);
+        button = findViewById(R.id.button);
+        back = findViewById(R.id.btnBack);
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registerNewUser();
+            }
+        });
+
+        // Takes you the sign in
+        textView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // Takes you to welcome page
+        back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -43,15 +73,27 @@ public class RegisterActivity extends AppCompatActivity {
 
         String email;
         String password;
+        String password2;
         email = emailTextView.getText().toString();
         password = passwordTextView.getText().toString();
+        password2 = password2TextView.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Enter Email", Toast.LENGTH_LONG).show();
             return;
         }
-        if (TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(password) || TextUtils.isEmpty(password)) {
             Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (password.length() < 6) {
+            Toast.makeText(getApplicationContext(),
+                    "Your password must be at least 6 characters long",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!password.equals(password2)) {
+            Toast.makeText(getApplicationContext(), "Passwords Are Not Equal", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -62,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Registration successful", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            Intent intent = new Intent(RegistrationActivity.this, EcoGaugeActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_LONG).show();
