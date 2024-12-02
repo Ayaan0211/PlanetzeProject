@@ -62,7 +62,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         final Map<String, String[]> transportationQuestionsMap = new HashMap<>();
         transportationQuestionsMap.put(transportationQuestions[0], getResources().getStringArray(R.array.userOwnsCar));
-        transportationQuestionsMap.put(transportationQuestions[1], getResources().getStringArray(R.array.userOwnsCar));
+        transportationQuestionsMap.put(transportationQuestions[1], getResources().getStringArray(R.array.vehicleFuelType));
         transportationQuestionsMap.put(transportationQuestions[2], getResources().getStringArray(R.array.distanceDriven));
         transportationQuestionsMap.put(transportationQuestions[3], getResources().getStringArray(R.array.publicTransportationFrequency));
         transportationQuestionsMap.put(transportationQuestions[4], getResources().getStringArray(R.array.publicTransportationTime));
