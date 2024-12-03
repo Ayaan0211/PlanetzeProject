@@ -25,6 +25,10 @@
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
+            android:name=".EcoTrackerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+        <activity
             android:name=".RegistrationActivity"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />

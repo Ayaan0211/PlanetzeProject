@@ -2,18 +2,24 @@ package com.example.planetzeproject;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.planetzeproject.databinding.ActivityEcogaugeBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,10 +40,46 @@ public class EcoTrackerActivity extends AppCompatActivity {
     private TextView textSelectedDate;
     private String selectedDate;
 
+    BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecotracker);
+
+        //navbar
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.tracker);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.tracker) {
+                return true;
+            } else if (id == R.id.gauge) {
+                startActivity(new Intent(EcoTrackerActivity.this, EcoGaugeActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.logout) {
+                FirebaseAuth.getInstance().signOut();
+
+                // Clear any locally stored user data (if necessary)
+                SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
+
+                // Redirect to WelcomeActivity
+                Intent intent = new Intent(EcoTrackerActivity.this, WelcomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+                startActivity(intent);
+                finish();
+
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         //initializing database stuff
         mAuth = FirebaseAuth.getInstance();
@@ -363,5 +405,10 @@ public class EcoTrackerActivity extends AppCompatActivity {
         TextView ConsumptionTextView = findViewById(R.id.textShoppingConsumption);
         ConsumptionTextView.setText("Total Consumption CO2 Emissions Today: 0.0 kg");
     }
+
+
+
+
+
 }
 
