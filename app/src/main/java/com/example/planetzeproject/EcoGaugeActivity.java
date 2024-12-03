@@ -1,5 +1,6 @@
 package com.example.planetzeproject;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -7,13 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -26,28 +28,60 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class EcoGaugeActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     FirebaseUser user;
+    DatabaseReference databaseReference;
     BarChart barChart;
     LineChart lineChart;
     List<BarEntry> barEntryList;
-    List<String> xValues, barValues;
-    Button totalWeekly, totalMonthly, totalYearly, emissionWeekly, emissionMonthly, emissionYearly;
+    List<String> xValues;
+    Button Yearly, Monthly, Weekly;
     TextView totalEmissionText;
     BottomNavigationView bottomNavigationView;
+    public HashMap<String, String> spinnerData = new HashMap<>();
+    public HashMap<String, String> textInputData = new HashMap<>();
+    private TextView textSelectedDate;
+    private String selectedDate;
+    public Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ecogauge);
+
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        textSelectedDate = findViewById(R.id.text_selected_date);
+        textSelectedDate.setOnClickListener((v -> openDatePicker()));
+
+        barChart = findViewById(R.id.barchart);
+        lineChart = findViewById(R.id.linechart);
+        totalEmissionText = findViewById(R.id.totalemission);
+        Weekly = findViewById(R.id.weekly);
+        Monthly = findViewById(R.id.monthly);
+        Yearly = findViewById(R.id.yearly);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.tracker);
@@ -56,6 +90,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.tracker) {
                 startActivity(new Intent(EcoGaugeActivity.this, EcoTrackerActivity.class));
+                finish();
                 return true;
             } else if (id == R.id.gauge) {
                 return true;
@@ -80,96 +115,104 @@ public class EcoGaugeActivity extends AppCompatActivity {
             }
         });
 
-        barChart = findViewById(R.id.barchart);
-        barEntryList = new ArrayList<>();
         setBarValues();
         setUpBarChart();
 
-        lineChart = findViewById(R.id.linechart);
-        lineChart.getAxisRight().setDrawLabels(false);
-        setUpWeeklyLineX();
-        setUpWeeklyLineY();
-        setUpWeeklyLineChart();
-
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-
-        // Initialize the Button
-        totalWeekly = findViewById(R.id.weekly);
-        totalMonthly = findViewById(R.id.monthly);
-        totalYearly = findViewById(R.id.yearly);
-
-        emissionWeekly= findViewById(R.id.weekly2);
-        emissionMonthly = findViewById(R.id.monthly2);
-        emissionYearly = findViewById(R.id.yearly2);
-        totalEmissionText = findViewById(R.id.totalemission);
-
-        // Checks if a user is not logged in, if not send user back to login page
-        if (user == null){
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        // Set OnClickListener for the button
-        totalWeekly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Update the TextView's text
-                totalEmissionText.setText("Your weekly emission is!");
-            }
+        Weekly.setOnClickListener(view -> {
+            //retrieveWeeklyData();
+            retrieveFromFirebase();
+            setUpWeeklyLineX();
+            setUpWeeklyLineY();
+            setUpWeeklyLineChart();
         });
-
-        totalMonthly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Update the TextView's text
-                totalEmissionText.setText("Your monthly emission is!");
-            }
+        Monthly.setOnClickListener(view -> {
+            //retrieveMonthlyData();
+            retrieveFromFirebase();
+            setUpMonthlyLineX();
+            setUpMonthlyLineY();
+            setUpMonthlyLineChart();
         });
-
-        totalYearly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Update the TextView's text
-                totalEmissionText.setText("Your annual emission is!");
-            }
+        Yearly.setOnClickListener(view -> {
+            //retrieveYearlyData();
+            retrieveFromFirebase();
+            setUpYearlyLineX();
+            setUpYearlyLineY();
+            setUpYearlyLineChart();
         });
-
-        emissionWeekly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setUpWeeklyLineX();
-                setUpWeeklyLineY();
-                setUpWeeklyLineChart();
-            }
-        });
-
-        emissionMonthly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setUpMonthlyLineX();
-                setUpMonthlyLineY();
-                setUpMonthlyLineChart();
-            }
-        });
-
-        emissionYearly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setUpYearlyLineX();
-                setUpYearlyLineY();
-                setUpYearlyLineChart();
-            }
-        });
-
+    }
+    public void openDatePicker() {
+        calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                EcoGaugeActivity.this,
+                (view, year1, monthOfYear, dayOfMonth1) -> {
+                    // Format the selected date
+                    selectedDate = dayOfMonth1 + "-" + (monthOfYear + 1) + "-" + year1;
+                    textSelectedDate.setText(selectedDate); // Update the TextView with the selected date
+                }, year, month, dayOfMonth);
+        datePickerDialog.show();
     }
 
+    private void retrieveFromFirebase() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            // User is not logged in, redirect to login page
+            Toast.makeText(EcoGaugeActivity.this, "Please log in first.", Toast.LENGTH_SHORT).show();
+            // Redirect to login activity if necessary
+            Intent intent = new Intent(EcoGaugeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            return; // Stop execution if no user is logged in
+        }
+
+        if (selectedDate == null || selectedDate.isEmpty()) {
+            Toast.makeText(EcoGaugeActivity.this, "Please select a date to delete data.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userID = currentUser.getUid(); // User ID
+        DatabaseReference userEcoDataRef = databaseReference.child("users").child(userID).child("ecoTrackerData").child(selectedDate);
+
+        userEcoDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Check if the data exists
+                if (dataSnapshot.exists()) {
+                    // Access CO2 values from the snapshot
+                    Double totalco2 = dataSnapshot.child("totalCo2").getValue(Double.class);
+
+                    if (totalco2 != null && totalco2 != 0) {
+                        TextView emissionsTextView = findViewById(R.id.compuser);
+                        emissionsTextView.setText("Total CO2 Emissions Today: " + totalco2 + " kg");
+                    } else {
+                        // Handle case where the totalCO2 is zero or null
+                        TextView emissionsTextView = findViewById(R.id.compuser);
+                        emissionsTextView.setText("No CO2 data available for today.");
+                    }
+                } else {
+                    // Handle case where data doesn't exist for the selected date
+                    TextView emissionsTextView = findViewById(R.id.compuser);
+                    emissionsTextView.setText("No data available for the selected date: " + selectedDate);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle errors
+                Toast.makeText(EcoGaugeActivity.this, "Failed to retrieve data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
     private void setBarValues() {
-        barEntryList.add(new BarEntry(1,300));
-        barEntryList.add(new BarEntry(2,400));
-        barEntryList.add(new BarEntry(3,200));
-        barEntryList.add(new BarEntry(4,600));
+        barEntryList = new ArrayList<>();
+        barEntryList.add(new BarEntry(1, 300));
+        barEntryList.add(new BarEntry(2, 400));
+        barEntryList.add(new BarEntry(3, 200));
+        barEntryList.add(new BarEntry(4, 600));
     }
 
     private void setUpBarChart() {
@@ -180,28 +223,21 @@ public class EcoGaugeActivity extends AppCompatActivity {
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
 
-        // Disable description and legend
-        barChart.getDescription().setEnabled(false);
-
-        // Set up the X-axis labels
-        List<String> barValues = Arrays.asList("", "Transportation", "Energy Use",
-                "Food", "Shopping");
+        List<String> barValues = Arrays.asList("", "Transportation", "Energy Use", "Food", "Shopping");
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(barValues)); // Set custom labels
-        xAxis.setLabelCount(barValues.size()); // Ensure all labels are shown
-        xAxis.setGranularity(1f); // Ensure 1-to-1 mapping of labels
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(barValues));
+        xAxis.setLabelCount(barValues.size());
+        xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
+        xAxis.setDrawGridLines(false);
 
-        // Remove gridlines for X-axis
-        xAxis.setDrawGridLines(false); // Hides vertical gridlines
-
-        // Remove gridlines for Y-axis
         YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setDrawGridLines(false); // Hides horizontal gridlines
-        barChart.getAxisRight().setDrawGridLines(false); // Hides gridlines on the right Y-axis
+        leftAxis.setDrawGridLines(false);
+        barChart.getAxisRight().setDrawGridLines(false);
 
-        barChart.invalidate(); // Refresh the chart
+        barChart.getDescription().setEnabled(false);
+        barChart.invalidate();
     }
 
     private void setUpWeeklyLineChart() {
@@ -224,6 +260,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
+
     private void setUpWeeklyLineX() {
         xValues = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 
@@ -235,7 +272,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
     }
 
-    private void setUpWeeklyLineY(){
+    private void setUpWeeklyLineY() {
         YAxis yAxis = lineChart.getAxisLeft();
         yAxis.setAxisMinimum(0f);
         yAxis.setAxisLineWidth(2f);
@@ -260,6 +297,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
+
     private void setUpMonthlyLineX() {
         xValues = Arrays.asList("Week 1", "Week 2", "Week 3", "Week 4");
 
@@ -271,7 +309,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
     }
 
-    private void setUpMonthlyLineY(){
+    private void setUpMonthlyLineY() {
         YAxis yAxis = lineChart.getAxisLeft();
         yAxis.setAxisMinimum(0f);
         yAxis.setAxisLineWidth(2f);
@@ -296,6 +334,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
+
     private void setUpYearlyLineX() {
         xValues = Arrays.asList("Week 1", "Week 2", "Week 3", "Week 4");
 
@@ -307,7 +346,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
     }
 
-    private void setUpYearlyLineY(){
+    private void setUpYearlyLineY() {
         YAxis yAxis = lineChart.getAxisLeft();
         yAxis.setAxisMinimum(0f);
         yAxis.setAxisLineWidth(2f);

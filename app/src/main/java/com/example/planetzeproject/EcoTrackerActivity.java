@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
@@ -86,7 +87,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         textSelectedDate = findViewById(R.id.text_selected_date);
-        textSelectedDate.setOnClickListener((v-> openDatePicker()));
+        textSelectedDate.setOnClickListener((v -> openDatePicker()));
 
         // setting spinner list
         String[] transportOptions = {"Bus", "Train", "Subway"};
@@ -144,11 +145,11 @@ public class EcoTrackerActivity extends AppCompatActivity {
             saveToFirebase();
         });
 
-        btnupdate.setOnClickListener(v-> {
+        btnupdate.setOnClickListener(v -> {
             retrieveFromFirebase();
-            });
+        });
 
-        btnDelete.setOnClickListener(v-> {
+        btnDelete.setOnClickListener(v -> {
             deleteFromDatabase();
         });
     }
@@ -211,7 +212,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
 
         databaseReference.child("users").child(userID).child("ecoTrackerData").child(selectedDate).setValue(userEcoData)
                 .addOnSuccessListener(aVoid -> {
-                //success message
+                    //success message
                     Toast.makeText(EcoTrackerActivity.this, "Data saved successfully!", Toast.LENGTH_SHORT).show();
                     retrieveFromFirebase();
                 })
@@ -282,7 +283,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             return; // Stop execution if no user is logged in
         }
         if (selectedDate == null || selectedDate.isEmpty()) {
-            Toast.makeText(EcoTrackerActivity.this, "Please select a date to delete data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EcoTrackerActivity.this, "Please select a date to view data.", Toast.LENGTH_SHORT).show();
             return;
         }
         String userID = currentUser.getUid(); // redirect null to login page later
@@ -405,10 +406,6 @@ public class EcoTrackerActivity extends AppCompatActivity {
         TextView ConsumptionTextView = findViewById(R.id.textShoppingConsumption);
         ConsumptionTextView.setText("Total Consumption CO2 Emissions Today: 0.0 kg");
     }
-
-
-
-
 
 }
 

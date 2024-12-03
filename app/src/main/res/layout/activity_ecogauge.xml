@@ -28,20 +28,13 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
             <TextView
-                android:id="@+id/emissions"
-                android:layout_width="match_parent"
+                android:id="@+id/text_selected_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#FF6200EE"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Total CO2e Emissions Overview"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <!-- Horizontal layout for buttons -->
+                android:layout_margin="16dp"
+                android:text="Select a date"
+                android:textSize="18sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,6 +62,19 @@
                     android:layout_weight="1"
                     android:text="yearly" />
             </LinearLayout>
+            <TextView
+                android:id="@+id/emissions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FF6200EE"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Total CO2e Emissions Overview"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
 
             <TextView
                 android:id="@+id/totalemission"
@@ -108,33 +114,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <Button
-                    android:id="@+id/weekly2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="weekly" />
-
-                <Button
-                    android:id="@+id/monthly2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="monthly" />
-
-                <Button
-                    android:id="@+id/yearly2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="yearly" />
-            </LinearLayout>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/linechart"
