@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -129,11 +130,12 @@ public class EcoGaugeActivity extends AppCompatActivity {
         Refresh.setOnClickListener(view -> {
             retrieveFromFirebase();
             TextView nationalEmissionsTextView = findViewById(R.id.compnational);
-            nationalEmissionsTextView.setText("National Average: " + nationalC02/365 + " kg");
+            nationalEmissionsTextView.setText("National Average: " + nationalC02 / 365 + " kg");
             TextView globalEmissionsTextView = findViewById(R.id.compglobal);
-            globalEmissionsTextView.setText("Global Average: " + globalC02/365 + " kg");
+            globalEmissionsTextView.setText("Global Average: " + globalC02 / 365 + " kg");
         });
         Weekly.setOnClickListener(view -> {
+            calculateWeeklyEmissions();
             setUpWeeklyLineX();
             setUpWeeklyLineY();
             setUpWeeklyLineChart();
@@ -149,6 +151,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
             setUpYearlyLineChart();
         });
     }
+
     public void openDatePicker() {
         calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -210,6 +213,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
                     // Handle case where data doesn't exist for the selected date
                     TextView emissionsTextView = findViewById(R.id.compuser);
                     emissionsTextView.setText("No data available for the selected date: " + selectedDate);
+                    clearGraphs();
                 }
             }
 
@@ -219,6 +223,89 @@ public class EcoGaugeActivity extends AppCompatActivity {
                 Toast.makeText(EcoGaugeActivity.this, "Failed to retrieve data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+    private void clearGraphs() {
+        barChart.clear();
+
+        barChart.invalidate();
+    }
+
+    private void calculateWeeklyEmissions() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(EcoGaugeActivity.this, "Please log in first.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(EcoGaugeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
+
+        // Calculate the dates for the current week (from Sunday to Saturday)
+        List<String> weekDates = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        // Parse the selected date to a Calendar instance
+        Calendar selectedCalendar = Calendar.getInstance();
+        try {
+            selectedCalendar.setTime(dateFormat.parse(selectedDate));
+        } catch (Exception e) {
+            Toast.makeText(this, "Invalid date selected.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Calculate the dates for the week starting from the selected date (backward for 7 days)
+        for (int i = 0; i < 7; i++) {
+            weekDates.add(dateFormat.format(selectedCalendar.getTime()));
+            selectedCalendar.add(Calendar.DAY_OF_YEAR, -1); // Move one day backward
+        }
+
+        // Reverse the list to have the dates in ascending order
+        Collections.reverse(weekDates);
+
+        // Retrieve and sum CO2 emissions for each day of the week
+        List<Double> dailyEmissions = new ArrayList<>();
+
+        for (String date : weekDates) {
+            String userID = currentUser.getUid(); // User ID
+            DatabaseReference userEcoDataRef = databaseReference
+                    .child("users")
+                    .child(userID)
+                    .child("ecoTrackerData")
+                    .child(date);
+
+            userEcoDataRef.addListenerForSingleValueEvent(new ValueEventListener(){
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Double dailyCO2 = dataSnapshot.child("totalCo2").getValue(Double.class);
+                        if (dailyCO2 != null) {
+                            dailyEmissions.add(dailyCO2);
+                        } else {
+                            dailyEmissions.add(0.0);
+                        }
+                    }
+                    else{
+                        dailyEmissions.add(0.0);
+                    }
+
+                    if (dailyEmissions.size() == 7) { // Once all data is fetched
+                        double totalWeeklyEmissions = 0;
+                        for (Double emission : dailyEmissions) {
+                            totalWeeklyEmissions += emission;
+                        }
+
+                        // Display total weekly emissions
+                        TextView emissionsTextView = findViewById(R.id.totalemission);
+                        emissionsTextView.setText("Total Weekly CO2 Emissions: " + dailyEmissions + " kg" + date.getClass());
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(EcoGaugeActivity.this, "Failed to retrieve data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void setBarValues() {
