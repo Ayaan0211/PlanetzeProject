@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     public void login(Context context) {
         System.out.println("WORKS!");
         Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(context, EcoGaugeActivity.class);
+        Intent intent = new Intent(context, EcoTrackerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
