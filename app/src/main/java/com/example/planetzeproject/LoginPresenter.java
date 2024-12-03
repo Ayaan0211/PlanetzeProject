@@ -3,12 +3,11 @@ package com.example.planetzeproject;
 import android.content.Context;
 import android.text.TextUtils;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseUser;
 
 
 
-public class LoginPresenter extends AppCompatActivity {
+public class LoginPresenter {
 
 
     private LoginModel model;
