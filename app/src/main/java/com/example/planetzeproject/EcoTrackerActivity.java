@@ -200,7 +200,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             return; // Stop execution if no user is logged in
         }
         if (selectedDate == null || selectedDate.isEmpty()) {
-            Toast.makeText(EcoTrackerActivity.this, "Please select a date to delete data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EcoTrackerActivity.this, "Please select a date to save data.", Toast.LENGTH_SHORT).show();
             return;
         }
         String userID = currentUser.getUid(); // redirect null to login page later
@@ -384,6 +384,15 @@ public class EcoTrackerActivity extends AppCompatActivity {
         co2Consumption = Math.round(co2Consumption * 100.0) / 100.0;
         double totalCo2 = co2Transport + co2Food + co2Consumption;
         totalCo2 = Math.round(totalCo2 * 100.0) / 100.0;
+
+        HashMap<String, Object> userCo2Data = new HashMap<>();
+        userCo2Data.put("co2Transport", co2Transport);
+        userCo2Data.put("co2Food", co2Food);
+        userCo2Data.put("co2Consumption", co2Consumption);
+        userCo2Data.put("totalCo2", totalCo2);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userID = currentUser.getUid();
+        databaseReference.child("users").child(userID).child("ecoTrackerData").child(selectedDate).updateChildren(userCo2Data);
 
         TextView emissionsTextView = findViewById(R.id.textViewTotalEmissions);
         emissionsTextView.setText("Total CO2 Emissions Today: " + totalCo2 + " kg");
