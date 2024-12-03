@@ -52,14 +52,21 @@ public class EcoGaugeActivity extends AppCompatActivity {
     LineChart lineChart;
     List<BarEntry> barEntryList;
     List<String> xValues;
-    Button Yearly, Monthly, Weekly;
+    Button Yearly, Monthly, Weekly, Refresh;
     TextView totalEmissionText;
     BottomNavigationView bottomNavigationView;
+    final double globalC02 = 4000;
+    final double nationalC02 = 15220;
     public HashMap<String, String> spinnerData = new HashMap<>();
     public HashMap<String, String> textInputData = new HashMap<>();
     private TextView textSelectedDate;
     private String selectedDate;
     public Calendar calendar;
+    Double barTransportation;
+    Double barEnergy;
+    Double barFood;
+    Double barTotal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +88,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         Weekly = findViewById(R.id.weekly);
         Monthly = findViewById(R.id.monthly);
         Yearly = findViewById(R.id.yearly);
+        Refresh = findViewById(R.id.refresh);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -115,26 +123,27 @@ public class EcoGaugeActivity extends AppCompatActivity {
             }
         });
 
-        setBarValues();
-        setUpBarChart();
+        //setBarValues();
+        //setUpBarChart();
 
-        Weekly.setOnClickListener(view -> {
-            //retrieveWeeklyData();
+        Refresh.setOnClickListener(view -> {
             retrieveFromFirebase();
+            TextView nationalEmissionsTextView = findViewById(R.id.compnational);
+            nationalEmissionsTextView.setText("National Average: " + nationalC02/365 + " kg");
+            TextView globalEmissionsTextView = findViewById(R.id.compglobal);
+            globalEmissionsTextView.setText("Global Average: " + globalC02/365 + " kg");
+        });
+        Weekly.setOnClickListener(view -> {
             setUpWeeklyLineX();
             setUpWeeklyLineY();
             setUpWeeklyLineChart();
         });
         Monthly.setOnClickListener(view -> {
-            //retrieveMonthlyData();
-            retrieveFromFirebase();
             setUpMonthlyLineX();
             setUpMonthlyLineY();
             setUpMonthlyLineChart();
         });
         Yearly.setOnClickListener(view -> {
-            //retrieveYearlyData();
-            retrieveFromFirebase();
             setUpYearlyLineX();
             setUpYearlyLineY();
             setUpYearlyLineChart();
@@ -149,7 +158,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
                 EcoGaugeActivity.this,
                 (view, year1, monthOfYear, dayOfMonth1) -> {
                     // Format the selected date
-                    selectedDate = dayOfMonth1 + "-" + (monthOfYear + 1) + "-" + year1;
+                    selectedDate = year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth1;
                     textSelectedDate.setText(selectedDate); // Update the TextView with the selected date
                 }, year, month, dayOfMonth);
         datePickerDialog.show();
@@ -185,6 +194,13 @@ public class EcoGaugeActivity extends AppCompatActivity {
                     if (totalco2 != null && totalco2 != 0) {
                         TextView emissionsTextView = findViewById(R.id.compuser);
                         emissionsTextView.setText("Total CO2 Emissions Today: " + totalco2 + " kg");
+                        emissionsTextView.setText("Total CO2 Emissions Today: " + totalco2 + " kg");
+                        barTransportation = dataSnapshot.child("co2Transport").getValue(Double.class);
+                        barEnergy = dataSnapshot.child("co2Consumption").getValue(Double.class);
+                        barFood = dataSnapshot.child("co2Food").getValue(Double.class);
+                        barTotal = totalco2;
+                        setBarValues();
+                        setUpBarChart();
                     } else {
                         // Handle case where the totalCO2 is zero or null
                         TextView emissionsTextView = findViewById(R.id.compuser);
@@ -205,14 +221,12 @@ public class EcoGaugeActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void setBarValues() {
         barEntryList = new ArrayList<>();
-        barEntryList.add(new BarEntry(1, 300));
-        barEntryList.add(new BarEntry(2, 400));
-        barEntryList.add(new BarEntry(3, 200));
-        barEntryList.add(new BarEntry(4, 600));
+        barEntryList.add(new BarEntry(1, barTransportation.floatValue()));
+        barEntryList.add(new BarEntry(2, barEnergy.floatValue()));
+        barEntryList.add(new BarEntry(3, barFood.floatValue()));
+        barEntryList.add(new BarEntry(4, barTotal.floatValue()));
     }
 
     private void setUpBarChart() {
@@ -223,7 +237,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
 
-        List<String> barValues = Arrays.asList("", "Transportation", "Energy Use", "Food", "Shopping");
+        List<String> barValues = Arrays.asList("", "Transportation", "Energy Use", "Food", "Total");
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(barValues));

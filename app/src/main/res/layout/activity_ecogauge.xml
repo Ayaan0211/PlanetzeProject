@@ -28,13 +28,19 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-            <TextView
-                android:id="@+id/text_selected_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="Select a date"
-                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/text_selected_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Select a date"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,27 +85,11 @@
             <TextView
                 android:id="@+id/totalemission"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="60dp"
                 android:paddingLeft="20dp"
-                android:text="Your weekly emission is !"
+                android:text=""
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/breakdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FF6200EE"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Emissions Breakdown by Category"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barchart"
-                android:layout_width="match_parent"
-                android:layout_height="170dp" />
 
 
             <TextView
@@ -121,6 +111,29 @@
                 android:layout_height="170dp" />
 
             <TextView
+                android:id="@+id/breakdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FF6200EE"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Emissions Breakdown by Category"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/refresh"
+                android:text="Show Your Data" />
+
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barchart"
+                android:layout_width="match_parent"
+                android:layout_height="170dp" />
+
+            <TextView
                 android:id="@+id/comparison"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,13 +144,12 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
             <TextView
                 android:id="@+id/compuser"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="Your Daily Emission:  "
+                android:text="Your Daily CO2 Emission:  "
                 android:textStyle="bold" />
 
             <TextView
@@ -145,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="National Average:"
+                android:text="National Average CO2 Emissions:"
                 android:textStyle="bold" />
 
             <TextView
@@ -153,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="Global Average: "
+                android:text="Global Average CO2 Emissions: "
                 android:textStyle="bold" />
 
 

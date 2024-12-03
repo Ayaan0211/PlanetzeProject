@@ -62,6 +62,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation("com.google.android.material:material:1.9.0)
+    implementation("com.google.android.material:material:1.9.0")
     //implementation("com.google.android.gms:play-services:17.0.0")
 }

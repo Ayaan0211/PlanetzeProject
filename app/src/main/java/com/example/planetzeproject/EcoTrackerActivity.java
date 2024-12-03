@@ -163,7 +163,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
                 EcoTrackerActivity.this,
                 (view, year1, monthOfYear, dayOfMonth1) -> {
                     // Format the selected date
-                    selectedDate = dayOfMonth1 + "-" + (monthOfYear + 1) + "-" + year1;
+                    selectedDate = year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth1;
                     textSelectedDate.setText(selectedDate); // Update the TextView with the selected date
                 }, year, month, dayOfMonth);
         datePickerDialog.show();
