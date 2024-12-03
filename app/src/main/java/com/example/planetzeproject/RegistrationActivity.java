@@ -104,7 +104,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Registration successful", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegistrationActivity.this, EcoTrackerActivity.class);
+                            Intent intent = new Intent(RegistrationActivity.this, EcoGaugeActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_LONG).show();

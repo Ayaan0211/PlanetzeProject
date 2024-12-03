@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.firebase.inappmessaging)
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     testImplementation(libs.junit)
     //testImplementation(libs.mockito.all)
     //testImplementation("org.mockito:mockito-all:1.10.19");

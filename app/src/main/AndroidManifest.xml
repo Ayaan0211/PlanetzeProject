@@ -21,11 +21,7 @@
             android:name=".OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PlanetzeProject" />
-        <activity
-            android:name=".EcoTrackerActivity"
+            android:name=".EcoGaugeActivity"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity

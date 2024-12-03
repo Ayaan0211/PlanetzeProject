@@ -1,6 +1,5 @@
 package com.example.planetzeproject;
 
-
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
