@@ -219,9 +219,16 @@ public class QuestionnaireActivity extends AppCompatActivity {
         else {
             userFormatted = "nulluser";
         }
-        String questionFormatted = question.replace("/", "%2F");
-        String answerFormatted = answer.replace("/", "%2F");
+        String questionFormatted = QuestionnaireActivity.this.formatString(question);
+        String answerFormatted = QuestionnaireActivity.this.formatString(answer);
         DatabaseReference uref = db.getReference("users");
-        uref.child(userFormatted).child(questionFormatted).setValue(answerFormatted);
+        uref.child(userFormatted).child("questionnaireData").child(questionFormatted).setValue(answerFormatted);
+    }
+
+    private String formatString(String string){
+        String formattedString;
+        formattedString = string.replace("/", "%2F");
+        formattedString = formattedString.replace(".", "%2E");
+        return formattedString;
     }
 }
