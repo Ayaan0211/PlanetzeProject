@@ -221,7 +221,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
         String questionFormatted = question.replace("/", "%2F");
         String answerFormatted = answer.replace("/", "%2F");
-        DatabaseReference uref = db.getReference("Users");
+        DatabaseReference uref = db.getReference("users");
         uref.child(userFormatted).child(questionFormatted).setValue(answerFormatted);
     }
 }
