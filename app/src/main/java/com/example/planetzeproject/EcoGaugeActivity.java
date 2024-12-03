@@ -60,6 +60,13 @@ public class EcoGaugeActivity extends AppCompatActivity {
     private TextView textSelectedDate;
     private String selectedDate;
     public Calendar calendar;
+    final double globalC02 = 4000;
+    final double nationalC02 = 15220;
+    Double totalco2;
+    Double barTransportation;
+    Double barEnergy;
+    Double barFood;
+    Double barTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +122,8 @@ public class EcoGaugeActivity extends AppCompatActivity {
             }
         });
 
-        setBarValues();
-        setUpBarChart();
+        /*setBarValues();
+        setUpBarChart();*/
 
         Weekly.setOnClickListener(view -> {
             //retrieveWeeklyData();
@@ -124,6 +131,10 @@ public class EcoGaugeActivity extends AppCompatActivity {
             setUpWeeklyLineX();
             setUpWeeklyLineY();
             setUpWeeklyLineChart();
+            TextView nationalEmissionsTextView = findViewById(R.id.compnational);
+            nationalEmissionsTextView.setText("National Average: " + nationalC02/52 + " kg");
+            TextView globalEmissionsTextView = findViewById(R.id.compglobal);
+            globalEmissionsTextView.setText("Global Average: " + globalC02/52 + " kg");
         });
         Monthly.setOnClickListener(view -> {
             //retrieveMonthlyData();
@@ -131,6 +142,10 @@ public class EcoGaugeActivity extends AppCompatActivity {
             setUpMonthlyLineX();
             setUpMonthlyLineY();
             setUpMonthlyLineChart();
+            TextView nationalEmissionsTextView = findViewById(R.id.compnational);
+            nationalEmissionsTextView.setText("National Average: " + nationalC02/12 + " kg");
+            TextView globalEmissionsTextView = findViewById(R.id.compglobal);
+            globalEmissionsTextView.setText("Global Average: " + globalC02/12 + " kg");
         });
         Yearly.setOnClickListener(view -> {
             //retrieveYearlyData();
@@ -138,6 +153,10 @@ public class EcoGaugeActivity extends AppCompatActivity {
             setUpYearlyLineX();
             setUpYearlyLineY();
             setUpYearlyLineChart();
+            TextView nationalEmissionsTextView = findViewById(R.id.compnational);
+            nationalEmissionsTextView.setText("National Average: " + nationalC02 + " kg");
+            TextView globalEmissionsTextView = findViewById(R.id.compglobal);
+            globalEmissionsTextView.setText("Global Average: " + globalC02 + " kg");
         });
     }
     public void openDatePicker() {
@@ -156,6 +175,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
     }
 
     private void retrieveFromFirebase() {
+        //FirebaseUser currentUser = auth.getCurrentUser();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null) {
             // User is not logged in, redirect to login page
@@ -167,11 +187,12 @@ public class EcoGaugeActivity extends AppCompatActivity {
         }
 
         if (selectedDate == null || selectedDate.isEmpty()) {
-            Toast.makeText(EcoGaugeActivity.this, "Please select a date to delete data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EcoGaugeActivity.this, "Please select a date to view data.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String userID = currentUser.getUid(); // User ID
+        //String userID = currentUser.getUid(); // User ID
+        String userID = "FeF3Ms32yRM7kQSQZraXjqE3fhp2"; //CHANGE THIS LINE
         DatabaseReference userEcoDataRef = databaseReference.child("users").child(userID).child("ecoTrackerData").child(selectedDate);
 
         userEcoDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -180,20 +201,28 @@ public class EcoGaugeActivity extends AppCompatActivity {
                 // Check if the data exists
                 if (dataSnapshot.exists()) {
                     // Access CO2 values from the snapshot
-                    Double totalco2 = dataSnapshot.child("totalCo2").getValue(Double.class);
+                    totalco2 = dataSnapshot.child("totalCo2").getValue(Double.class);
 
                     if (totalco2 != null && totalco2 != 0) {
                         TextView emissionsTextView = findViewById(R.id.compuser);
                         emissionsTextView.setText("Total CO2 Emissions Today: " + totalco2 + " kg");
+                        barTransportation = dataSnapshot.child("co2Transport").getValue(Double.class);
+                        barEnergy = dataSnapshot.child("co2Consumption").getValue(Double.class);
+                        barFood = dataSnapshot.child("co2Food").getValue(Double.class);
+                        barTotal = totalco2;
+                        setBarValues();
+                        setUpBarChart();
                     } else {
                         // Handle case where the totalCO2 is zero or null
                         TextView emissionsTextView = findViewById(R.id.compuser);
                         emissionsTextView.setText("No CO2 data available for today.");
+                        //clearGraphs();
                     }
                 } else {
                     // Handle case where data doesn't exist for the selected date
                     TextView emissionsTextView = findViewById(R.id.compuser);
                     emissionsTextView.setText("No data available for the selected date: " + selectedDate);
+                    clearGraphs();
                 }
             }
 
@@ -205,14 +234,19 @@ public class EcoGaugeActivity extends AppCompatActivity {
         });
     }
 
+    private void clearGraphs() {
+        barChart.clear();
+
+        barChart.invalidate();
+    }
 
 
     private void setBarValues() {
         barEntryList = new ArrayList<>();
-        barEntryList.add(new BarEntry(1, 300));
-        barEntryList.add(new BarEntry(2, 400));
-        barEntryList.add(new BarEntry(3, 200));
-        barEntryList.add(new BarEntry(4, 600));
+        barEntryList.add(new BarEntry(1, barTransportation.floatValue()));
+        barEntryList.add(new BarEntry(2, barEnergy.floatValue()));
+        barEntryList.add(new BarEntry(3, barFood.floatValue()));
+        barEntryList.add(new BarEntry(4, barTotal.floatValue()));
     }
 
     private void setUpBarChart() {
@@ -223,7 +257,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
 
-        List<String> barValues = Arrays.asList("", "Transportation", "Energy Use", "Food", "Shopping");
+        List<String> barValues = Arrays.asList("", "Transportation", "Energy Use", "Food", "Total");
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(barValues));
@@ -242,7 +276,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
 
     private void setUpWeeklyLineChart() {
         List<Entry> entries1 = new ArrayList<>();
-        entries1.add(new Entry(0, 10f));
+        entries1.add(new Entry(0, 5f));
         entries1.add(new Entry(1, 10f));
         entries1.add(new Entry(2, 15f));
         entries1.add(new Entry(3, 45f));
@@ -325,6 +359,14 @@ public class EcoGaugeActivity extends AppCompatActivity {
         entries1.add(new Entry(1, 10f));
         entries1.add(new Entry(2, 15f));
         entries1.add(new Entry(3, 45f));
+        entries1.add(new Entry(4, 45f));
+        entries1.add(new Entry(5, 45f));
+        entries1.add(new Entry(6, 45f));
+        entries1.add(new Entry(7, 45f));
+        entries1.add(new Entry(8, 45f));
+        entries1.add(new Entry(9, 45f));
+        entries1.add(new Entry(10, 45f));
+        entries1.add(new Entry(11, 45f));
 
         LineDataSet dataSet1 = new LineDataSet(entries1, "");
         dataSet1.setColor(Color.BLACK);
@@ -334,14 +376,15 @@ public class EcoGaugeActivity extends AppCompatActivity {
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
-
     private void setUpYearlyLineX() {
-        xValues = Arrays.asList("Week 1", "Week 2", "Week 3", "Week 4");
+        xValues = Arrays.asList("Jan", "Feb", "Mar", "Apr",
+                "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+                "Nov", "Dec");
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xValues));
-        xAxis.setLabelCount(4);
+        xAxis.setLabelCount(12);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
     }

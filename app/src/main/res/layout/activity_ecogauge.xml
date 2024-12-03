@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="National Average:"
+                android:text="National Average: "
                 android:textStyle="bold" />
 
             <TextView
