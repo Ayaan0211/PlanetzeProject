@@ -1,6 +1,7 @@
 package com.example.planetzeproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -39,13 +41,44 @@ public class EcoGaugeActivity extends AppCompatActivity {
     List<String> xValues, barValues;
     Button totalWeekly, totalMonthly, totalYearly, emissionWeekly, emissionMonthly, emissionYearly;
     TextView totalEmissionText;
-
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ecogauge);
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.tracker);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.tracker) {
+                startActivity(new Intent(EcoGaugeActivity.this, EcoTrackerActivity.class));
+                return true;
+            } else if (id == R.id.gauge) {
+                return true;
+            } else if (id == R.id.logout) {
+                FirebaseAuth.getInstance().signOut();
+
+                // Clear any locally stored user data (if necessary)
+                SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
+
+                // Redirect to WelcomeActivity
+                Intent intent = new Intent(EcoGaugeActivity.this, WelcomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+                startActivity(intent);
+                finish();
+
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         barChart = findViewById(R.id.barchart);
         barEntryList = new ArrayList<>();

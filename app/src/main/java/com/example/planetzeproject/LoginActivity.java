@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (presenter.checkLoggedIn() != null) {
-            Intent intent = new Intent(getApplicationContext(), EcoGaugeActivity.class);
+            Intent intent = new Intent(getApplicationContext(), EcoTrackerActivity.class);
             startActivity(intent);
             finish();
         }
