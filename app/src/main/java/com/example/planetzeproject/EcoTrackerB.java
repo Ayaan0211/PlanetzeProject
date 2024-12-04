@@ -15,6 +15,10 @@ import com.google.firebase.database.ValueEventListener;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This class was intended to handle the habit suggestion portion of Eco Tracker, but is unfinished
+ */
+
 public class EcoTrackerB extends AppCompatActivity {
     String selectedDate; //REMEMBER TO MAKE THIS HYPHENS AND NOT SLASHES
     protected void onCreate(Bundle savedInstanceState) {
