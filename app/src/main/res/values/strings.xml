@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Planetze Project</string>
+    <string name="title_activity_questionnaire">QuestionnaireActivity</string>
+    <string name="header_activity_questionnaire">Questionnaire</string>
+    <string name="empty_answer">–</string>
+    <string name="label_category_activity_questionnaire">Category</string>
+    <string name="label_question_activity_questionnaire">Question</string>
+    <string name="label_answer_activity_questionnaire">Answer</string>
+    <string name="label_submit_button_activity_questionnaire">Submit Questionnaire</string>
     <string name="login" />
     <string name="email" />
     <string name="password" />

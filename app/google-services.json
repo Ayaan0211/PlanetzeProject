@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "373487986512",
+    "firebase_url": "https://planetze-project-default-rtdb.firebaseio.com",
     "project_id": "planetze-project",
     "storage_bucket": "planetze-project.firebasestorage.app"
   },
