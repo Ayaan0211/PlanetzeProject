@@ -33,6 +33,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     protected String selectedCategory, selectedQuestion;
     String emptyAnswer = "-"; // Will be overwritten during onCreate()
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();

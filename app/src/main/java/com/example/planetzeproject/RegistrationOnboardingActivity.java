@@ -95,7 +95,7 @@ public class RegistrationOnboardingActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Registration successful", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegistrationOnboardingActivity.this, EcoGaugeActivity.class);
+                            Intent intent = new Intent(RegistrationOnboardingActivity.this, QuestionnaireActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_LONG).show();
