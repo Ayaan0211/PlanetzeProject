@@ -28,26 +28,38 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/emissions"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FF6200EE"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Total CO2e Emissions Overview"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Date:"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/text_selected_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Click to select a date"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
-            <!-- Horizontal layout for buttons -->
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="3">
-
+                android:weightSum="4">
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/refresh"
+                    android:text="Daily" />
                 <Button
                     android:id="@+id/weekly"
                     android:layout_width="0dp"
@@ -69,32 +81,27 @@
                     android:layout_weight="1"
                     android:text="yearly" />
             </LinearLayout>
-
             <TextView
-                android:id="@+id/totalemission"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:paddingLeft="20dp"
-                android:text="Your weekly emission is !"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/breakdown"
+                android:id="@+id/emissions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FF6200EE"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Emissions Breakdown by Category"
+                android:text="Total CO2e Emissions Overview"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barchart"
+            <TextView
+                android:id="@+id/totalemission"
                 android:layout_width="match_parent"
-                android:layout_height="170dp" />
-
+                android:layout_height="60dp"
+                android:paddingLeft="20dp"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/trend"
@@ -108,36 +115,25 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <Button
-                    android:id="@+id/weekly2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="weekly" />
-
-                <Button
-                    android:id="@+id/monthly2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="monthly" />
-
-                <Button
-                    android:id="@+id/yearly2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="yearly" />
-            </LinearLayout>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/linechart"
+                android:layout_width="match_parent"
+                android:layout_height="170dp" />
+
+            <TextView
+                android:id="@+id/breakdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FF6200EE"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Daily Emissions Breakdown by Category"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barchart"
                 android:layout_width="match_parent"
                 android:layout_height="170dp" />
 
@@ -152,13 +148,12 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
             <TextView
                 android:id="@+id/compuser"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="Your Daily Emission:  "
+                android:text="Your Daily CO2 Emission:  "
                 android:textStyle="bold" />
 
             <TextView
@@ -166,7 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="National Average:"
+                android:text="National Average CO2 Emissions:"
                 android:textStyle="bold" />
 
             <TextView
@@ -174,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:paddingLeft="20dp"
-                android:text="Global Average: "
+                android:text="Global Average CO2 Emissions: "
                 android:textStyle="bold" />
 
 
