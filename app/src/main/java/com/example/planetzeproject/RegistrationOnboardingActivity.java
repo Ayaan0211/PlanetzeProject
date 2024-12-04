@@ -18,12 +18,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationOnboardingActivity extends AppCompatActivity {
 
     private EditText emailTextView, passwordTextView, password2TextView;
     private FirebaseAuth mAuth;
     TextView textView;
-    Button button, back;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class RegistrationActivity extends AppCompatActivity {
         password2TextView = findViewById(R.id.password2);
         textView = findViewById(R.id.SignIn);
         button = findViewById(R.id.button);
-        back = findViewById(R.id.btnBack);
+
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -58,15 +58,6 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        // Takes you to welcome page
-        back.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
     private void registerNewUser() {
@@ -104,7 +95,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Registration successful", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegistrationActivity.this, QuestionnaireActivity.class);
+                            Intent intent = new Intent(RegistrationOnboardingActivity.this, EcoGaugeActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_LONG).show();

@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
@@ -86,7 +87,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         textSelectedDate = findViewById(R.id.text_selected_date);
-        textSelectedDate.setOnClickListener((v-> openDatePicker()));
+        textSelectedDate.setOnClickListener((v -> openDatePicker()));
 
         // setting spinner list
         String[] transportOptions = {"Bus", "Train", "Subway"};
@@ -144,11 +145,11 @@ public class EcoTrackerActivity extends AppCompatActivity {
             saveToFirebase();
         });
 
-        btnupdate.setOnClickListener(v-> {
+        btnupdate.setOnClickListener(v -> {
             retrieveFromFirebase();
-            });
+        });
 
-        btnDelete.setOnClickListener(v-> {
+        btnDelete.setOnClickListener(v -> {
             deleteFromDatabase();
         });
     }
@@ -162,7 +163,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
                 EcoTrackerActivity.this,
                 (view, year1, monthOfYear, dayOfMonth1) -> {
                     // Format the selected date
-                    selectedDate = dayOfMonth1 + "-" + (monthOfYear + 1) + "-" + year1;
+                    selectedDate = year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth1;
                     textSelectedDate.setText(selectedDate); // Update the TextView with the selected date
                 }, year, month, dayOfMonth);
         datePickerDialog.show();
@@ -211,7 +212,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
 
         databaseReference.child("users").child(userID).child("ecoTrackerData").child(selectedDate).setValue(userEcoData)
                 .addOnSuccessListener(aVoid -> {
-                //success message
+                    //success message
                     Toast.makeText(EcoTrackerActivity.this, "Data saved successfully!", Toast.LENGTH_SHORT).show();
                     retrieveFromFirebase();
                 })
@@ -282,7 +283,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             return; // Stop execution if no user is logged in
         }
         if (selectedDate == null || selectedDate.isEmpty()) {
-            Toast.makeText(EcoTrackerActivity.this, "Please select a date to delete data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EcoTrackerActivity.this, "Please select a date to view data.", Toast.LENGTH_SHORT).show();
             return;
         }
         String userID = currentUser.getUid(); // redirect null to login page later
@@ -352,20 +353,22 @@ public class EcoTrackerActivity extends AppCompatActivity {
                 co2Transport += 6600;
             }
         }
-        co2Transport += kilometersDriven;
+
         co2Transport += (distanceWalkedCycled * 0.063);
+        co2Transport /= 365;
+        co2Transport += kilometersDriven;
 
         double co2Food = 0.0;
         if (Objects.equals(servingsType, "Beef")) {
-            co2Food = co2Food + (2500 * servingsConsumed);
+            co2Food = co2Food + (15 * servingsConsumed);
         } else if (Objects.equals(servingsType, "Pork")) {
-            co2Food = co2Food + (1450 * servingsConsumed);
+            co2Food = co2Food + (10 * servingsConsumed);
         } else if (Objects.equals(servingsType, "Chicken")) {
-            co2Food = co2Food + (950 * servingsConsumed);
+            co2Food = co2Food + (9 * servingsConsumed);
         } else if (Objects.equals(servingsType, "Fish")) {
-            co2Food = co2Food + (800 * servingsConsumed);
+            co2Food = co2Food + (8 * servingsConsumed);
         } else {
-            co2Food = co2Food + (500 * servingsConsumed);
+            co2Food = co2Food + (5 * servingsConsumed);
         }
 
         double co2Consumption = 0.0;
@@ -395,29 +398,25 @@ public class EcoTrackerActivity extends AppCompatActivity {
         databaseReference.child("users").child(userID).child("ecoTrackerData").child(selectedDate).updateChildren(userCo2Data);
 
         TextView emissionsTextView = findViewById(R.id.textViewTotalEmissions);
-        emissionsTextView.setText("Total CO2 Emissions Today: " + totalCo2 + " kg");
+        emissionsTextView.setText("Total CO₂e: " + totalCo2 + " kg");
         TextView TransportationTextView = findViewById(R.id.textTransportationEmissions);
-        TransportationTextView.setText("Total Transportation CO2 Emissions Today: " + co2Transport + " kg");
+        TransportationTextView.setText("Transportation CO₂e: " + co2Transport + " kg");
         TextView FoodTextView = findViewById(R.id.textFoodConsumption);
-        FoodTextView.setText("Total Food CO2 Emissions Today: " + co2Food + "kg");
+        FoodTextView.setText("Food CO₂e: " + co2Food + "kg");
         TextView ConsumptionTextView = findViewById(R.id.textShoppingConsumption);
-        ConsumptionTextView.setText("Total Consumption CO2 Emissions Today: " + co2Consumption + " kg");
+        ConsumptionTextView.setText("Consumption CO₂e: " + co2Consumption + " kg");
 
     }
     public void performCalculations() {
         TextView emissionsTextView = findViewById(R.id.textViewTotalEmissions);
-        emissionsTextView.setText("Total CO2 Emissions Today: 0.0 kg");
+        emissionsTextView.setText("Total CO₂e: 0.0 kg");
         TextView TransportationTextView = findViewById(R.id.textTransportationEmissions);
-        TransportationTextView.setText("Total Transportation CO2 Emissions Today: 0.0 kg");
+        TransportationTextView.setText("Transportation CO₂e: 0.0 kg");
         TextView FoodTextView = findViewById(R.id.textFoodConsumption);
-        FoodTextView.setText("Total Food CO2 Emissions Today: 0.0 kg");
+        FoodTextView.setText("Food CO₂e: 0.0 kg");
         TextView ConsumptionTextView = findViewById(R.id.textShoppingConsumption);
-        ConsumptionTextView.setText("Total Consumption CO2 Emissions Today: 0.0 kg");
+        ConsumptionTextView.setText("Consumption CO₂e: 0.0 kg");
     }
-
-
-
-
 
 }
 
