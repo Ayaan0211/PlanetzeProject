@@ -1,9 +1,11 @@
 package com.example.planetzeproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.util.Log;
 import android.widget.Toast;
@@ -100,12 +102,22 @@ public class QuestionnaireActivity extends AppCompatActivity {
         stringToQuestions.put(categoryQuestions[4], consumptionQuestionsMap);
 
 
+        // Make button go to EcoTracker
+        Button button = findViewById(R.id.questionnaireSubmit);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(QuestionnaireActivity.this, EcoTrackerActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         // Get the spinner from the layout
         Spinner categorySelector = findViewById(R.id.categorySelector);
         Spinner questionSelector = findViewById(R.id.questionSelector);
         Spinner answerSelector = findViewById(R.id.answerSelector);
+
+
 
 
         // Create an ArrayAdapter using the category array

@@ -6,6 +6,7 @@
     <string name="label_category_activity_questionnaire">Category</string>
     <string name="label_question_activity_questionnaire">Question</string>
     <string name="label_answer_activity_questionnaire">Answer</string>
+    <string name="label_submit_button_activity_questionnaire">Submit Questionnaire</string>
     <string name="login" />
     <string name="email" />
     <string name="password" />

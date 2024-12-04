@@ -67,5 +67,11 @@
             android:layout_height="wrap_content"
             android:minHeight="48dp" />
 
+        <Button
+            android:id="@+id/questionnaireSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_submit_button_activity_questionnaire" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
