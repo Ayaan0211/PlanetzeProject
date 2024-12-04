@@ -42,7 +42,7 @@
             android:minHeight="48dp" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/questionnaireQuestionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_question_activity_questionnaire"

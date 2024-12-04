@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -174,6 +175,9 @@ public class QuestionnaireActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // Get the selected question from the spinner
                 selectedQuestion = parentView.getItemAtPosition(position).toString();
+
+                TextView questionText = findViewById(R.id.questionnaireQuestionText);
+                questionText.setText(selectedQuestion);
 
                 Map<String, String[]> currentQuestionMap = stringToQuestions.get(selectedCategory);
 
