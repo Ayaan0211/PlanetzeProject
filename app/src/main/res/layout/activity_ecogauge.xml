@@ -32,12 +32,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Date:"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <TextView
                     android:id="@+id/text_selected_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:text="Select a date"
-                    android:textSize="18sp" />
+                    android:text="Click to select a date"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -91,7 +99,9 @@
                 android:layout_height="60dp"
                 android:paddingLeft="20dp"
                 android:text=""
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/trend"
@@ -118,7 +128,7 @@
                 android:background="#FF6200EE"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Emissions Breakdown by Category"
+                android:text="Daily Emissions Breakdown by Category"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />

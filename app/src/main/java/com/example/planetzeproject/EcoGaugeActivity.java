@@ -536,9 +536,9 @@ public class EcoGaugeActivity extends AppCompatActivity {
         entries1.add(new Entry(1, 10f));
         entries1.add(new Entry(2, 15f));
         entries1.add(new Entry(3, 45f));
-        entries1.add(new Entry(4, 45f));
-        entries1.add(new Entry(5, 45f));
-        entries1.add(new Entry(6, 45f));
+        entries1.add(new Entry(4, 35f));
+        entries1.add(new Entry(5, 25f));
+        entries1.add(new Entry(6, 30f));
 
         LineDataSet dataSet1 = new LineDataSet(entries1, null);
         dataSet1.setColor(Color.BLACK);
@@ -589,7 +589,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
     }
 
     private void setUpMonthlyLineX() {
-        xValues = Arrays.asList("Week 1", "Week 2", "Week 3", "Week 4");
+        xValues = Arrays.asList("Week 1", "Week 2", "Week 3", "Current Week");
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -612,9 +612,10 @@ public class EcoGaugeActivity extends AppCompatActivity {
     private void setUpYearlyLineChart() {
         List<Entry> entries1 = new ArrayList<>();
         entries1.add(new Entry(0, 10f));
-        entries1.add(new Entry(1, 10f));
-        entries1.add(new Entry(2, 15f));
-        entries1.add(new Entry(3, 45f));
+        entries1.add(new Entry(1, 30f));
+        entries1.add(new Entry(2, 55f));
+        entries1.add(new Entry(3, 25f));
+        entries1.add(new Entry(4, 15f));
 
         LineDataSet dataSet1 = new LineDataSet(entries1, "");
         dataSet1.setColor(Color.BLACK);
@@ -626,7 +627,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
     }
 
     private void setUpYearlyLineX() {
-        xValues = Arrays.asList("Week 1", "Week 2", "Week 3", "Week 4");
+        xValues = Arrays.asList("Month 1", "Month 2", "Month 3", "Month 4", "Current Month");
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
