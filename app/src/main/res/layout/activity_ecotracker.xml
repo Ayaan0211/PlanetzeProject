@@ -42,7 +42,7 @@
                     android:id="@+id/textViewTotalEmissions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total CO₂ Emissions Today: 0.0 kg"
+                    android:text="Total CO₂e: 0.0 kg"
                     android:textSize="18sp"
                     android:textColor="#000000"
                     android:layout_marginBottom="4dp" />
@@ -51,7 +51,7 @@
                     android:id="@+id/textTransportationEmissions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Transportation CO₂ Emissions: 0.0 kg"
+                    android:text="Transportation CO₂e: 0.0 kg"
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
@@ -59,7 +59,7 @@
                     android:id="@+id/textFoodConsumption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Food CO₂ Emissions: 0.0 kg"
+                    android:text="Food CO₂e: 0.0 kg"
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
@@ -67,7 +67,7 @@
                     android:id="@+id/textShoppingConsumption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Shopping CO₂ Emissions: 0.0 kg"
+                    android:text="Consumption CO₂e: 0.0 kg"
                     android:textSize="16sp" />
             </LinearLayout>
 
